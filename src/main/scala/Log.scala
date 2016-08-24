@@ -1,6 +1,6 @@
-class ServerLog(val id: String, val bytes: Int, val browser: String)
+class Log(val id: String, val bytes: Int, val browser: String)
 
-object ServerLog {
+object Log {
   private val pattern = (
     "^(\\S+)\\s" +
     "(\\S+)\\s" +
@@ -26,11 +26,11 @@ object ServerLog {
     val firstMatch = pattern.findFirstMatchIn(line)
     if (firstMatch.isDefined) {
       val pattern = firstMatch.get
-      new ServerLog(pattern.group("id"),
-                    pattern.group("bytes").toInt,
-                    pattern.group("browser"))
+      new Log(pattern.group("id"),
+              pattern.group("bytes").toInt,
+              pattern.group("browser"))
     } else {
-      new ServerLog("", -1, "")
+      new Log("", -1, "")
     }
   }
 }
