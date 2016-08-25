@@ -1,28 +1,47 @@
-import LogProcessor.LogRDD
+import CustomAccumulators.WordsCounter
+import CustomRDD.LogRDD
 import com.holdenkarau.spark.testing.SharedSparkContext
 import org.scalatest.FlatSpec
 
+import scala.collection.mutable
+
 class BytesCountTest extends FlatSpec with SharedSparkContext {
+  it should "count words with custom accumulator" in {
+    val wordsLog = List(
+      "key",
+      "key",
+      "value",
+      "key")
+    val expectedVal = mutable.Map(
+      "key" -> 3,
+      "value" -> 1)
+    assert(expectedVal === countWords(wordsLog))
+  }
+
+  def countWords(log: List[String]) = {
+    val wordsAccumulator = sc.accumulable(mutable.Map[String, Int]().withDefaultValue(0))
+    sc.parallelize(log).map(wordsAccumulator += _).collect()
+    wordsAccumulator.value
+  }
+
   it should "count average and total bytes by ip" in {
-    val rawLog = List(
-      "ip1 - - [1/Jan/1970:00:00:00 -0000] \"request\" 200 100 \"host\" \"browser\"",
-      "ip1 - - [1/Jan/1970:00:00:00 -0000] \"request\" 200 200 \"host\" \"browser\"",
-      "ip2 - - [1/Jan/1970:00:00:00 -0000] \"request\" 200 1 \"host\" \"browser\"",
-      "ip2 - - [1/Jan/1970:00:00:00 -0000] \"request\" 200 1 \"host\" \"browser\"")
-    val result = List(
+    val bytesLog = List(
+      "ip1 100",
+      "ip1 200",
+      "ip2 1",
+      "ip2 1")
+    val expectedVal = List(
       "ip1,150,300",
       "ip2,1,2")
-    assert(result === processLog(rawLog))
+    assert(expectedVal === countBytes(bytesLog))
   }
 
-  it should "ignore lines without bytes value" in {
-    val rawLog = List(
-      "ip1 - - [1/Jan/1970:00:00:00 -0000] \"request\" 200 100 \"host\" \"browser\"",
-      "ip1 - - [1/Jan/1970:00:00:00 -0000] \"request\" 304 - \"host\" \"browser\"")
-    val result = List("ip1,100,100")
-    assert(result === processLog(rawLog))
-  }
-
-  def processLog(log: List[String]) =
-    sc.parallelize(log).countBytes().collect().toList
+  def countBytes(log: List[String]) =
+    sc.parallelize(log)
+        .map(line => Log(line.split(" ")(0),
+                         line.split(" ")(1).toInt,
+                         ""))
+        .countBytes()
+        .collect()
+        .toList
 }

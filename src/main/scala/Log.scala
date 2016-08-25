@@ -1,4 +1,4 @@
-class Log(val id: String, val bytes: Int, val browser: String)
+case class Log(id: String, bytes: Int, browser: String)
 
 object Log {
   private val pattern = (
@@ -22,7 +22,7 @@ object Log {
     "host",
     "browser")
 
-  def apply(line: String) = {
+  def apply(line: String): Log = {
     val firstMatch = pattern.findFirstMatchIn(line)
     if (firstMatch.isDefined) {
       val pattern = firstMatch.get
@@ -30,7 +30,7 @@ object Log {
               pattern.group("bytes").toInt,
               pattern.group("browser"))
     } else {
-      new Log("", -1, "")
+      Log("", -1, "")
     }
   }
 }
