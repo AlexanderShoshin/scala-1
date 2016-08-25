@@ -8,10 +8,10 @@ object CustomRDD {
     def parseLogs() = {
       stringRDD
           .map(Log(_))
-          .filter(_.bytes > 0)
+          .filter(_.bytes >= 0)
     }
 
-    def printSampleAndSubmit(sampleSize: Int, path: String) = {
+    def printSampleAndSave(sampleSize: Int, path: String) = {
       stringRDD.cache()
       stringRDD.take(sampleSize).foreach(value => println(value))
       stringRDD.saveAsTextFile(path)
@@ -21,7 +21,7 @@ object CustomRDD {
   implicit class LogRDD(logRDD: RDD[Log]) {
     def countBrowsers(counter: Accumulable[mutable.Map[String, Int], String]) = {
       logRDD.map(log => {
-        counter += log.browser
+        counter += UserAgent(log.userAgent).browserName
         log
       })
     }

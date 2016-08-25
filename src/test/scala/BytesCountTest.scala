@@ -20,7 +20,7 @@ class BytesCountTest extends FlatSpec with SharedSparkContext {
 
   def countWords(log: List[String]) = {
     val wordsAccumulator = sc.accumulable(mutable.Map[String, Int]().withDefaultValue(0))
-    sc.parallelize(log).map(wordsAccumulator += _).collect()
+    sc.parallelize(log, 2).map(wordsAccumulator += _).collect()
     wordsAccumulator.value
   }
 

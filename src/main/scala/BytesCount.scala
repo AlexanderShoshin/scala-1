@@ -13,7 +13,7 @@ object BytesCount extends App {
       .parseLogs()
       .countBrowsers(browsersAccumulator)
       .countBytes()
-      .printSampleAndSubmit(sampleSize = 5, path = args(1))
+      .printSampleAndSave(sampleSize = 5, path = args(1))
 
-  println(browsersAccumulator)
+  browsersAccumulator.value.foreach{case (browser, usageCount) => println(s"$browser - $usageCount")}
 }
