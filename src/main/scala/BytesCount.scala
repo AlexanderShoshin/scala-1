@@ -8,7 +8,7 @@ object BytesCount extends App {
   val conf = new SparkConf().setAppName("BytesCount")
   val sc = new SparkContext(conf)
 
-  val browsersAccumulator = sc.accumulable(mutable.Map[String, Int]().withDefaultValue(0))
+  val browsersAccumulator = sc.accumulable(mutable.Map[String, Int]().withDefaultValue(0))(WordsCounter)
   sc.textFile(path = args(0))
       .parseLogs()
       .countBrowsers(browsersAccumulator)
