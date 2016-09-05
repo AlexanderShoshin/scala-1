@@ -53,3 +53,7 @@ scala-1-assembly-1.0.jar \
 --output /training/spark/1
 ```
 **It is strongly recommended to define --executor-memory and --driver-memory flags when running on YARN. Otherwise your job may wait forever for resources allocation**
+
+## Results
+
+You can find screenshots of the application execution in /screenshots folder.
