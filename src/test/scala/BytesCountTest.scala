@@ -1,6 +1,7 @@
-import CustomAccumulators.WordsCounter
-import CustomRDD.LogRDD
+import implicits.CustomAccumulators.WordsCounter
+import implicits.CustomRDD.LogRDD
 import com.holdenkarau.spark.testing.SharedSparkContext
+import logstat.Log
 import org.scalatest.FlatSpec
 
 import scala.collection.mutable

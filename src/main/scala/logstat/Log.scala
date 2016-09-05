@@ -1,3 +1,5 @@
+package logstat
+
 case class Log(id: String, bytes: Int, userAgent: String)
 
 object Log {

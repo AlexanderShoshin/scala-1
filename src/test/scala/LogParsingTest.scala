@@ -1,3 +1,4 @@
+import logstat.Log
 import org.scalatest.FlatSpec
 
 class LogParsingTest extends FlatSpec {

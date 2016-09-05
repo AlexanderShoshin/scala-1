@@ -1,3 +1,6 @@
+package implicits
+
+import logstat.{Log, UserAgent}
 import org.apache.spark.Accumulable
 import org.apache.spark.rdd.RDD
 

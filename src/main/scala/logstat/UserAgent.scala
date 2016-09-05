@@ -1,3 +1,5 @@
+package logstat
+
 import net.sf.uadetector.service.UADetectorServiceFactory
 
 case class UserAgent(browserFamily: String, browserName: String)

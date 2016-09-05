@@ -1,3 +1,5 @@
+package implicits
+
 import org.apache.spark.AccumulableParam
 
 import scala.collection.mutable
