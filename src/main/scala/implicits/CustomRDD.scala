@@ -23,9 +23,8 @@ object CustomRDD {
 
   implicit class LogRDD(logRDD: RDD[Log]) {
     def countBrowsers(counter: Accumulable[mutable.Map[String, Int], String]) = {
-      logRDD.map(log => {
+      logRDD.foreach(log => {
         counter += UserAgent(log.userAgent).browserName
-        log
       })
     }
 

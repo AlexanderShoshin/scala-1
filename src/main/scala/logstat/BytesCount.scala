@@ -12,12 +12,15 @@ object BytesCount {
     val sc = new SparkContext(conf)
     val browsersAccumulator = sc.accumulable(mutable.Map[String, Int]().withDefaultValue(0))(WordsCounter)
 
-    sc.textFile(path = dataLocation.logsPath)
+    val logs = sc
+        .textFile(path = dataLocation.logsPath)
         .parseLogs()
-        .countBrowsers(browsersAccumulator)
-        .countBytes()
+        .cache()
+
+    logs.countBytes()
         .printSampleAndSave(sampleSize = 5, path = dataLocation.outputPath)
 
+    logs.countBrowsers(browsersAccumulator)
     browsersAccumulator.value.foreach{case (browser, usageCount) => println(s"$browser - $usageCount")}
   }
 }
